@@ -1,0 +1,5 @@
+# Ignore local installed libs (they can be installed with `go install`)
+pkg/
+
+# main program binary
+main
