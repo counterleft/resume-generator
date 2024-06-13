@@ -29,35 +29,35 @@
   }
 
   .section {
-    h1 {
+    .heading {
       color: #d13920;
       font-size: 11px;
       font-weight: bold;
       text-transform: uppercase;
     }
 
-    h2 {
+    .title {
       font-size: 11px;
       font-weight: bold;
       margin-bottom: 0;
     }
 
-    h3 {
-      font-size: 10px;
-      font-weight: 400;
+    .sub-title {
+      font-size: 11px;
+      font-weight: 300;
     }
 
-    span {
-      font-size: 9px;
+    .time-span {
+      font-size: 10px;
     }
 
     li {
-      font-size: 9px;
+      font-size: 10px;
     }
   }
 </style>
 
-<div class="container mx-auto px-8 py-8">
+<div class="container mx-auto px-10 py-10">
   <header class="header">
     <div class="grid grid-cols-4 gap-4">
       <div class="col-span-2">
@@ -82,13 +82,13 @@
 
   <section class="section">
     <div>
-      <h1 class="mt-2 mb-2 pb-1 border border-0 border-b-2 border-[#d13920]">Experience</h1>
+      <h1 class="heading mt-2 mb-2 pb-1 border border-0 border-b-2 border-[#d13920]">Experience</h1>
       {{ range . }}
       <article>
-        <div class="grid grid-cols-3 gap-x-4 gap-y-0 my-2">
-          <h2 class="col-span-2">{{ .Title }}</h2>
-          <span class="text-right opacity-50">{{ .StartDate }} - {{ .EndDate }}</span>
-          <h3 class="mt-0">{{ .Name }}</h3>
+        <div class="grid grid-cols-3 gap-x-4 gap-y-0 mt-2 leading-tight">
+          <h2 class="title col-span-2">{{ .Title }}</h2>
+          <span class="time-span text-right opacity-50">{{ .StartDate }} - {{ .EndDate }}</span>
+          <h3 class="sub-title col-span-3 mt-0">{{ .Name }}</h3>
         </div>
         <ul class="list-disc ml-4">
         {{ range .Accomplishments }}
@@ -100,18 +100,18 @@
     </div>
 
     <div>
-      <h1 class="mt-2 mb-2 border border-0 border-b-2 border-[#d13920]">Education</h1>
+      <h1 class="heading mt-2 mb-2 border border-0 border-b-2 border-[#d13920]">Education</h1>
       <article>
         <div class="grid grid-cols-8 gap-x-4 gap-y-0 my-2">
-          <h2>UCLA</h2>
-          <h3 class="col-span-6">Bachelors, Mathematics & Applied Science</h3>
-          <span class="text-right opacity-50">2001 - 2006</span>
+          <h2 class="title">UCLA</h2>
+          <h3 class="sub-title col-span-6">Bachelors, Mathematics & Applied Science</h3>
+          <span class="time-span text-right opacity-50">2001 - 2006</span>
         </div>
       </article>
     </div>
 
     <div>
-      <h1 class="mt-2 mb-2 border border-0 border-b-2 border-[#d13920]">Skills</h1>
+      <h1 class="heading mt-2 mb-2 border border-0 border-b-2 border-[#d13920]">Skills</h1>
       <article>
         <ul class="list-disc ml-4">
           <li>Tech: JavaScript, Ruby (Rails), Java, Elixir, AWS, GCP, MySQL, Oracle, Redis, OpenSearch, Kafka, GraphQL, REST, GitHub, GitLab, CircleCI, Sentry, Honeycomb, Vercel, Jenkins, PagerDuty, BigQuery, Grafana, RabbitMQ, nginx</li>
