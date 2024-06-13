@@ -3,3 +3,5 @@ pkg/
 
 # program binary
 resume-generator
+
+.DS_Store
