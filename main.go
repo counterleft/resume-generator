@@ -15,7 +15,7 @@ import (
 )
 
 type Job struct {
-	Name            string   `json:"name"`
+	Company         string   `json:"company"`
 	StartDate       string   `json:"startDate"`
 	EndDate         string   `json:"endDate"`
 	Title           string   `json:"title"`
@@ -63,7 +63,7 @@ func makeMultiSelects(jobs []Job, choices [][]string) []huh.Field {
 
 	for i, job := range jobs {
 		selects[i] = huh.NewMultiSelect[string]().
-			Title(job.Title).
+			Title(fmt.Sprintf("%s (%s)", job.Title, job.Company)).
 			Options(newAccomplishmentOptions(job)...).
 			Value(&choices[i])
 	}
@@ -101,7 +101,7 @@ func returnErrorf(message string, err error) error {
 
 func newJobView(j Job, accomplishments []string) Job {
 	return Job{
-		Name:            j.Name,
+		Company:         j.Company,
 		StartDate:       j.StartDate,
 		EndDate:         j.EndDate,
 		Title:           j.Title,
