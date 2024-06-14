@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/huh"
 	"github.com/charmbracelet/huh/spinner"
 	"github.com/charmbracelet/log"
@@ -88,7 +89,7 @@ func makeForm(jobs []Job, choices [][]string) *huh.Form {
 		huh.NewGroup(
 			selects...,
 		),
-	)
+	).WithProgramOptions(tea.WithAltScreen())
 }
 
 func runForm(form *huh.Form) {
