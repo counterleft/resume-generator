@@ -103,9 +103,9 @@
       <h1 class="heading mt-2 mb-2 border border-0 border-b-2 border-[#d13920]">Education</h1>
       <article>
         <div class="grid grid-cols-8 gap-x-4 gap-y-0 my-2">
-          <h2 class="title">UCLA</h2>
-          <h3 class="sub-title col-span-6">Bachelors, Mathematics & Applied Science</h3>
-          <span class="time-span text-right opacity-50">2001 - 2006</span>
+          <h2 class="title">{{ .Education.School }}</h2>
+          <h3 class="sub-title col-span-6">{{ .Education.Degree}}</h3>
+          <span class="time-span text-right opacity-50">{{ .Education.StartDate }} - {{ .Education.EndDate }}</span>
         </div>
       </article>
     </div>
