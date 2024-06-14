@@ -85,9 +85,26 @@ func newAccomplishmentOptions(j Job) []huh.Option[string] {
 func newForm(jobs []Job, choices [][]string) *huh.Form {
 	selects := newMultiSelects(jobs, choices)
 
+	foreground := lipgloss.CompleteAdaptiveColor{
+		Light: lipgloss.CompleteColor{TrueColor: "#8F2BF5", ANSI256: "55", ANSI: "45"},
+		Dark:  lipgloss.CompleteColor{TrueColor: "#F27EDE", ANSI256: "213", ANSI: "105"},
+	}
+
+	highlighted := lipgloss.NewStyle().Foreground(foreground)
+
+	desc := fmt.Sprintf("We've loaded your resume data.\nPlease %s you want in your generated resume.\nAll have been selected by default.", highlighted.Render("pick the accomplishments"))
+
+	fields := []huh.Field{
+		huh.NewNote().
+			Title("Welcome to Resume Generator").
+			Description(desc),
+	}
+
+	fields = append(fields, selects...)
+
 	form := huh.NewForm(
 		huh.NewGroup(
-			selects...,
+			fields...,
 		),
 	).WithProgramOptions(tea.WithAltScreen())
 
