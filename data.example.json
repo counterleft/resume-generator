@@ -1,0 +1,41 @@
+{
+  "header": {
+    "name": "Luke Skywalker",
+    "headline": "Jedi Master",
+    "linkedInUrl": "https://linkedin.com/does-mark-have-li",
+    "email": "luke@example.tld",
+    "location": "Tatooine, far far away",
+    "phone": "555-555-5555"
+  },
+  "education": {
+    "school": "Yoda's hut",
+    "degree": "Jedi training (incomplete)",
+    "startDate": "20xx",
+    "endDate": "20xx"
+  },
+  "skills": [
+    "Technology: Drones",
+    "Training: Light side of the force"
+  ],
+  "jobs": [
+    {
+      "company": "Jedi Temple",
+      "startDate": "20xx",
+      "endDate": "20xx",
+      "title": "Jedi Master",
+      "accomplishments": [
+        "Rebuilt the jedi order and trained a new generate of Jedi (until Darth Disney took over)."
+      ]
+    },
+    {
+      "company": "Rebels",
+      "startDate": "20xx",
+      "endDate": "20xx",
+      "title": "Jedi Knight & Pilot",
+      "accomplishments": [
+        "Successfully destroyed two weapons of mass destruction (Death Stars).",
+        "Defeated the Galactic Empire on various occasions and ensured freedom from their rule."
+      ]
+    }
+  ]
+}
