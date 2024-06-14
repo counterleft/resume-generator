@@ -45,7 +45,7 @@ type ResumeData struct {
 	Skills    []string  `json:"skills"`
 }
 
-func readJsonFileIntoContainer[T any](fileName string, container T) (T, error) {
+func readJsonFileInto[T any](fileName string, container T) (T, error) {
 	jsonData, err := os.ReadFile(fileName)
 	if err != nil {
 		return container, fmt.Errorf("unable to read data.json; make sure the file exists in the same directory as this program")
@@ -58,7 +58,7 @@ func readJsonFileIntoContainer[T any](fileName string, container T) (T, error) {
 	return container, nil
 }
 
-func makeMultiSelects(jobs []Job, choices [][]string) []huh.Field {
+func newMultiSelects(jobs []Job, choices [][]string) []huh.Field {
 	selects := make([]huh.Field, len(jobs))
 
 	for i, job := range jobs {
@@ -81,8 +81,8 @@ func newAccomplishmentOptions(j Job) []huh.Option[string] {
 	return options
 }
 
-func makeForm(jobs []Job, choices [][]string) *huh.Form {
-	selects := makeMultiSelects(jobs, choices)
+func newForm(jobs []Job, choices [][]string) *huh.Form {
+	selects := newMultiSelects(jobs, choices)
 
 	return huh.NewForm(
 		huh.NewGroup(
@@ -160,11 +160,11 @@ func printErrorAndExit(err error) {
 }
 
 func main() {
-	resumeData, err := readJsonFileIntoContainer("data.json", ResumeData{})
+	resumeData, err := readJsonFileInto("data.json", ResumeData{})
 	printErrorAndExit(err)
 
 	choices := make([][]string, len(resumeData.Jobs))
-	form := makeForm(resumeData.Jobs, choices)
+	form := newForm(resumeData.Jobs, choices)
 	err = form.Run()
 	printErrorAndExit(err)
 
