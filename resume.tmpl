@@ -59,19 +59,19 @@
 
 <div class="container mx-auto px-10 py-10">
   <header class="header">
-    <div class="grid grid-cols-4 gap-4">
+    <div class="grid grid-cols-6 gap-4">
       <div class="col-span-2">
         <h1>{{ .Header.Name }}</h1>
         <h2>{{ .Header.Headline }}</h2>
       </div>
-      <div class="col-span-1 mt-1">
+      <div class="col-start-4 col-span-2 mt-1">
         <ul>
           <li><a class="underline text-blue-600"
               href="{{ .Header.LinkedInUrl }}">{{ .Header.LinkedInUrl }}</a></li>
           <li><a class="underline text-blue-600" href="mailto:{{ .Header.Email }}">{{ .Header.Email }}</a></li>
         </ul>
       </div>
-      <div class="col-span-1 mt-1">
+      <div class="mt-1">
         <ul>
           <li>{{ .Header.Location }}</li>
           <li>{{ .Header.Phone }}</li>
