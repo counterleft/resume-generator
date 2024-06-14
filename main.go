@@ -11,6 +11,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/huh"
 	"github.com/charmbracelet/huh/spinner"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/playwright-community/playwright-go"
 )
 
@@ -84,11 +85,17 @@ func newAccomplishmentOptions(j Job) []huh.Option[string] {
 func newForm(jobs []Job, choices [][]string) *huh.Form {
 	selects := newMultiSelects(jobs, choices)
 
-	return huh.NewForm(
+	form := huh.NewForm(
 		huh.NewGroup(
 			selects...,
 		),
 	).WithProgramOptions(tea.WithAltScreen())
+
+	if os.Getenv("ACCESSIBLE") != "" {
+		form.WithAccessible(true)
+	}
+
+	return form
 }
 
 func returnErrorf(message string, err error) error {
@@ -182,4 +189,13 @@ func main() {
 	}
 
 	_ = spinner.New().Title("Preparing your resume...").Action(handleSubmission).Run()
+
+	style := lipgloss.NewStyle().
+		Bold(true).
+		Foreground(lipgloss.AdaptiveColor{Light: "#353535", Dark: "#FFF7D8"}).
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.AdaptiveColor{Light: "#8F2BF5", Dark: "#FF4D94"}).
+		Padding(1)
+
+	fmt.Println(style.Render("All done! Open up `resume.pdf`."))
 }
