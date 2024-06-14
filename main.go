@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"io"
 	"os"
@@ -112,19 +113,19 @@ func generateResume(jobs []Job, choices [][]string) {
 		panic(err)
 	}
 
-	file, err := os.Create("./playwright.html")
+	tempFile, err := os.CreateTemp("", "resume-generator-*.html")
 	if err != nil {
 		panic(err)
 	}
-	defer file.Close()
+	defer os.Remove(tempFile.Name())
+	defer tempFile.Close()
 
-	_, err = io.Copy(file, resumeText)
+	_, err = io.Copy(tempFile, resumeText)
 	if err != nil {
 		panic(err)
 	}
 
 	// Open with playwright and have it make a PDF
-
 	pw, err := playwright.Run()
 	assertErrorToNilf("could not launch playwright: %w", err)
 	browser, err := pw.Chromium.Launch()
@@ -133,10 +134,10 @@ func generateResume(jobs []Job, choices [][]string) {
 	assertErrorToNilf("could not create context: %w", err)
 	page, err := context.NewPage()
 	assertErrorToNilf("could not create page: %w", err)
-	_, err = page.Goto("file:///Users/brian/dev/me/resume-generator/playwright.html")
+	_, err = page.Goto(fmt.Sprintf("file://%s", tempFile.Name()))
 	assertErrorToNilf("could not goto: %w", err)
 	_, err = page.PDF(playwright.PagePdfOptions{
-		Path: playwright.String("playwright.pdf"),
+		Path: playwright.String("resume.pdf"),
 	})
 	assertErrorToNilf("could not create PDF: %w", err)
 	assertErrorToNilf("could not close browser: %w", browser.Close())
