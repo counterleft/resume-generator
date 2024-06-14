@@ -39,10 +39,10 @@ type Education struct {
 }
 
 type ResumeData struct {
-	Header    Header
-	Education Education
-	Jobs      []Job
-	Skills    []string
+	Header    Header    `json:"header"`
+	Education Education `json:"education"`
+	Jobs      []Job     `json:"jobs"`
+	Skills    []string  `json:"skills"`
 }
 
 func readJsonFileIntoContainer[T any](fileName string, container T) T {
@@ -161,29 +161,22 @@ func generateResume(resumeData ResumeData) {
 }
 
 func main() {
-	header := readJsonFileIntoContainer("header.json", Header{})
-	education := readJsonFileIntoContainer("education.json", Education{})
-	skills := readJsonFileIntoContainer("skills.json", []string{})
-	jobs := readJsonFileIntoContainer("jobs.json", []Job{})
+	resumeData := readJsonFileIntoContainer("data.json", ResumeData{})
 
-	choices := make([][]string, len(jobs))
-	form := makeForm(jobs, choices)
+	choices := make([][]string, len(resumeData.Jobs))
+	form := makeForm(resumeData.Jobs, choices)
 	runForm(form)
 
 	handleSubmission := func() {
-		views := make([]Job, len(jobs))
+		views := make([]Job, len(resumeData.Jobs))
 
-		for i, job := range jobs {
+		for i, job := range resumeData.Jobs {
 			views[i] = newJobView(job, choices[i])
 		}
 
-		generateResume(
-			ResumeData{
-				Header:    header,
-				Education: education,
-				Skills:    skills,
-				Jobs:      views,
-			})
+		resumeData.Jobs = views
+
+		generateResume(resumeData)
 	}
 
 	_ = spinner.New().Title("Preparing your resume...").Action(handleSubmission).Run()
