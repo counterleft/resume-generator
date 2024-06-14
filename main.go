@@ -22,18 +22,40 @@ type Job struct {
 	Accomplishments []string `json:"accomplishments"`
 }
 
-func getJobs(fileName string) []Job {
+type Header struct {
+	Name        string `json:"name"`
+	Headline    string `json:"headline"`
+	LinkedInUrl string `json:"linkedInUrl"`
+	Email       string `json:"email"`
+	Location    string `json:"location"`
+	Phone       string `json:"phone"`
+}
+
+type Education struct {
+	School    string `json:"school"`
+	Degree    string `json:"degree"`
+	StartDate string `json:"startDate"`
+	EndDate   string `json:"endDate"`
+}
+
+type ResumeData struct {
+	Header    Header
+	Education Education
+	Jobs      []Job
+	Skills    []string
+}
+
+func readJsonFileIntoContainer[T any](fileName string, container T) T {
 	jsonData, err := os.ReadFile(fileName)
 	if err != nil {
 		panic(err)
 	}
 
-	jobs := []Job{}
-	if err := json.Unmarshal(jsonData, &jobs); err != nil {
+	if err := json.Unmarshal(jsonData, &container); err != nil {
 		panic(err)
 	}
 
-	return jobs
+	return container
 }
 
 func makeMultiSelects(jobs []Job, choices [][]string) []huh.Field {
@@ -94,21 +116,15 @@ func newJobView(j Job, accomplishments []string) Job {
 	}
 }
 
-func generateResume(jobs []Job, choices [][]string) {
-	views := make([]Job, len(jobs))
-
-	for i, job := range jobs {
-		views[i] = newJobView(job, choices[i])
-	}
-
+func generateResume(resumeData ResumeData) {
 	templateFile := "resume.tmpl"
-	t, err := template.New(templateFile).ParseFiles(templateFile)
+	template, err := template.New(templateFile).ParseFiles(templateFile)
 	if err != nil {
 		panic(err)
 	}
 
 	resumeText := &bytes.Buffer{}
-	err = t.Execute(resumeText, views)
+	err = template.Execute(resumeText, resumeData)
 	if err != nil {
 		panic(err)
 	}
@@ -145,14 +161,29 @@ func generateResume(jobs []Job, choices [][]string) {
 }
 
 func main() {
-	jobs := getJobs("jobs.json")
-	choices := make([][]string, len(jobs))
+	header := readJsonFileIntoContainer("header.json", Header{})
+	education := readJsonFileIntoContainer("education.json", Education{})
+	skills := readJsonFileIntoContainer("skills.json", []string{})
+	jobs := readJsonFileIntoContainer("jobs.json", []Job{})
 
+	choices := make([][]string, len(jobs))
 	form := makeForm(jobs, choices)
 	runForm(form)
 
 	handleSubmission := func() {
-		generateResume(jobs, choices)
+		views := make([]Job, len(jobs))
+
+		for i, job := range jobs {
+			views[i] = newJobView(job, choices[i])
+		}
+
+		generateResume(
+			ResumeData{
+				Header:    header,
+				Education: education,
+				Skills:    skills,
+				Jobs:      views,
+			})
 	}
 
 	_ = spinner.New().Title("Preparing your resume...").Action(handleSubmission).Run()
