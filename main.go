@@ -11,7 +11,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/huh"
 	"github.com/charmbracelet/huh/spinner"
-	"github.com/charmbracelet/log"
 	"github.com/playwright-community/playwright-go"
 )
 
@@ -46,17 +45,17 @@ type ResumeData struct {
 	Skills    []string  `json:"skills"`
 }
 
-func readJsonFileIntoContainer[T any](fileName string, container T) T {
+func readJsonFileIntoContainer[T any](fileName string, container T) (T, error) {
 	jsonData, err := os.ReadFile(fileName)
 	if err != nil {
-		panic(err)
+		return container, fmt.Errorf("unable to read data.json; make sure the file exists in the same directory as this program")
 	}
 
 	if err := json.Unmarshal(jsonData, &container); err != nil {
-		panic(err)
+		return container, fmt.Errorf("unable to parse json in data.json; are the file contents malformed")
 	}
 
-	return container
+	return container, nil
 }
 
 func makeMultiSelects(jobs []Job, choices [][]string) []huh.Field {
@@ -92,19 +91,12 @@ func makeForm(jobs []Job, choices [][]string) *huh.Form {
 	).WithProgramOptions(tea.WithAltScreen())
 }
 
-func runForm(form *huh.Form) {
-	err := form.Run()
+func returnErrorf(message string, err error) error {
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		return fmt.Errorf(message+", file a bug at https://github.com/counterleft/resume-generator", err)
 	}
-}
 
-// XXX Do I need this?
-func assertErrorToNilf(message string, err error) {
-	if err != nil {
-		log.Fatalf(message, err)
-	}
+	return nil
 }
 
 func newJobView(j Job, accomplishments []string) Job {
@@ -117,56 +109,64 @@ func newJobView(j Job, accomplishments []string) Job {
 	}
 }
 
-func generateResume(resumeData ResumeData) {
+func generateResume(resumeData ResumeData) error {
 	templateFile := "resume.tmpl"
 	template, err := template.New(templateFile).ParseFiles(templateFile)
-	if err != nil {
-		panic(err)
-	}
+	returnErrorf("unable to parse the template file", err)
 
 	resumeText := &bytes.Buffer{}
 	err = template.Execute(resumeText, resumeData)
-	if err != nil {
-		panic(err)
-	}
+	returnErrorf("unable to execute the template file", err)
 
 	tempFile, err := os.CreateTemp("", "resume-generator-*.html")
-	if err != nil {
-		panic(err)
-	}
+	returnErrorf("unable to create temporary html file of resume", err)
 	defer os.Remove(tempFile.Name())
 	defer tempFile.Close()
 
 	_, err = io.Copy(tempFile, resumeText)
-	if err != nil {
-		panic(err)
-	}
+	returnErrorf("unable to copy resume data to temp html file", err)
 
 	// Open with playwright and have it make a PDF
 	pw, err := playwright.Run()
-	assertErrorToNilf("could not launch playwright: %w", err)
+	returnErrorf("could not launch playwright: %w", err)
+
 	browser, err := pw.Chromium.Launch()
-	assertErrorToNilf("could not launch Chromium: %w", err)
+	returnErrorf("could not launch Chromium: %w", err)
+
 	context, err := browser.NewContext()
-	assertErrorToNilf("could not create context: %w", err)
+	returnErrorf("could not create browser context: %w", err)
+
 	page, err := context.NewPage()
-	assertErrorToNilf("could not create page: %w", err)
+	returnErrorf("could not create browser page: %w", err)
+
 	_, err = page.Goto(fmt.Sprintf("file://%s", tempFile.Name()))
-	assertErrorToNilf("could not goto: %w", err)
+	returnErrorf("could not goto: %w", err)
+
 	_, err = page.PDF(playwright.PagePdfOptions{
 		Path: playwright.String("resume.pdf"),
 	})
-	assertErrorToNilf("could not create PDF: %w", err)
-	assertErrorToNilf("could not close browser: %w", browser.Close())
-	assertErrorToNilf("could not stop Playwright: %w", pw.Stop())
+	returnErrorf("could not create PDF: %w", err)
+	returnErrorf("could not close browser: %w", browser.Close())
+	returnErrorf("could not stop Playwright: %w", pw.Stop())
+
+	return nil
+}
+
+func printErrorAndExit(err error) {
+	if err != nil {
+		fmt.Printf("We ran into some trouble: %s\n", err.Error())
+		os.Exit(1)
+	}
 }
 
 func main() {
-	resumeData := readJsonFileIntoContainer("data.json", ResumeData{})
+	resumeData, err := readJsonFileIntoContainer("data.json", ResumeData{})
+	printErrorAndExit(err)
 
 	choices := make([][]string, len(resumeData.Jobs))
 	form := makeForm(resumeData.Jobs, choices)
-	runForm(form)
+	err = form.Run()
+	printErrorAndExit(err)
 
 	handleSubmission := func() {
 		views := make([]Job, len(resumeData.Jobs))
@@ -177,7 +177,8 @@ func main() {
 
 		resumeData.Jobs = views
 
-		generateResume(resumeData)
+		err = generateResume(resumeData)
+		printErrorAndExit(err)
 	}
 
 	_ = spinner.New().Title("Preparing your resume...").Action(handleSubmission).Run()
