@@ -84,6 +84,7 @@
     <div>
       <h1 class="heading mt-2 mb-2 pb-1 border border-0 border-b-2 border-[#d13920]">Experience</h1>
       {{ range .Jobs }}
+      {{ if gt (len .Accomplishments) 0 }}
       <article>
         <div class="grid grid-cols-3 gap-x-4 gap-y-0 mt-2 leading-tight">
           <h2 class="title col-span-2">{{ .Title }}</h2>
@@ -97,8 +98,10 @@
         </ul>
       </article>
       {{ end }}
+      {{ end }}
     </div>
 
+    {{ if .Education }}
     <div>
       <h1 class="heading mt-2 mb-2 border border-0 border-b-2 border-[#d13920]">Education</h1>
       <article>
@@ -109,7 +112,9 @@
         </div>
       </article>
     </div>
+    {{ end }}
 
+    {{ if gt (len .Skills) 0}}
     <div>
       <h1 class="heading mt-2 mb-2 border border-0 border-b-2 border-[#d13920]">Skills</h1>
       <article>
@@ -120,6 +125,7 @@
         </ul>
       </article>
     </div>
+    {{ end }}
   </section>
 
 </div>
