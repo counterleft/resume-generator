@@ -4,4 +4,7 @@ pkg/
 # program binary
 resume-generator
 
+# output
+resume.pdf
+
 .DS_Store
