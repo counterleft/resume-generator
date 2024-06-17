@@ -1,6 +1,3 @@
-# Ignore local installed libs (they can be installed with `go install`)
-pkg/
-
 # program binary
 resume-generator
 
