@@ -20,6 +20,7 @@ type Job struct {
 	StartDate       string   `json:"startDate"`
 	EndDate         string   `json:"endDate"`
 	Title           string   `json:"title"`
+	Summary         string   `json:"summary"`
 	Accomplishments []string `json:"accomplishments"`
 }
 
@@ -40,10 +41,11 @@ type Education struct {
 }
 
 type ResumeData struct {
-	Header    Header    `json:"header"`
-	Education Education `json:"education"`
-	Jobs      []Job     `json:"jobs"`
-	Skills    []string  `json:"skills"`
+	Header    Header        `json:"header"`
+	Education Education     `json:"education"`
+	Summary   template.HTML `json:"summary"`
+	Jobs      []Job         `json:"jobs"`
+	Skills    []string      `json:"skills"`
 }
 
 func readJsonFileInto[T any](fileName string, container T) (T, error) {
@@ -123,15 +125,16 @@ func returnErrorf(message string, err error) error {
 	return nil
 }
 
-func newJobView(j Job, accomplishments []string) Job {
-	return Job{
-		Company:         j.Company,
-		StartDate:       j.StartDate,
-		EndDate:         j.EndDate,
-		Title:           j.Title,
-		Accomplishments: accomplishments,
-	}
-}
+// func newJobView(j Job, accomplishments []string) Job {
+// 	return Job{
+// 		Company:         j.Company,
+// 		StartDate:       j.StartDate,
+// 		EndDate:         j.EndDate,
+// 		Title:           j.Title,
+// 		Summary:         j.Summary,
+// 		Accomplishments: accomplishments,
+// 	}
+// }
 
 func generateResume(resumeData ResumeData) error {
 	templateFile := "resume.tmpl"
@@ -184,22 +187,28 @@ func printErrorAndExit(err error) {
 }
 
 func main() {
-	resumeData, err := readJsonFileInto("data.json", ResumeData{})
+	if len(os.Args) < 2 {
+		printErrorAndExit(fmt.Errorf("no <resume.json> file specified"))
+	}
+
+	dataFileName := os.Args[1]
+
+	resumeData, err := readJsonFileInto(dataFileName, ResumeData{})
 	printErrorAndExit(err)
 
-	choices := make([][]string, len(resumeData.Jobs))
-	form := newForm(resumeData.Jobs, choices)
-	err = form.Run()
-	printErrorAndExit(err)
+	// choices := make([][]string, len(resumeData.Jobs))
+	// form := newForm(resumeData.Jobs, choices)
+	// err = form.Run()
+	// printErrorAndExit(err)
 
 	handleSubmission := func() {
-		views := make([]Job, len(resumeData.Jobs))
+		// views := make([]Job, len(resumeData.Jobs))
 
-		for i, job := range resumeData.Jobs {
-			views[i] = newJobView(job, choices[i])
-		}
+		// for i, job := range resumeData.Jobs {
+		// 	views[i] = newJobView(job, choices[i])
+		// }
 
-		resumeData.Jobs = views
+		// resumeData.Jobs = views
 
 		err = generateResume(resumeData)
 		printErrorAndExit(err)
