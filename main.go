@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"io"
 	"os"
+	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/huh"
@@ -136,7 +137,7 @@ func returnErrorf(message string, err error) error {
 // 	}
 // }
 
-func generateResume(resumeData ResumeData) error {
+func generateResume(resumeData ResumeData, outputFilename string) error {
 	templateFile := "resume.tmpl"
 	template, err := template.New(templateFile).ParseFiles(templateFile)
 	returnErrorf("unable to parse the template file", err)
@@ -170,7 +171,7 @@ func generateResume(resumeData ResumeData) error {
 	returnErrorf("could not goto: %w", err)
 
 	_, err = page.PDF(playwright.PagePdfOptions{
-		Path: playwright.String("resume.pdf"),
+		Path: playwright.String(outputFilename),
 	})
 	returnErrorf("could not create PDF: %w", err)
 	returnErrorf("could not close browser: %w", browser.Close())
@@ -201,6 +202,8 @@ func main() {
 	// err = form.Run()
 	// printErrorAndExit(err)
 
+	outputFilename := strings.Split(dataFileName, ".")[0] + ".pdf"
+
 	handleSubmission := func() {
 		// views := make([]Job, len(resumeData.Jobs))
 
@@ -210,7 +213,7 @@ func main() {
 
 		// resumeData.Jobs = views
 
-		err = generateResume(resumeData)
+		err = generateResume(resumeData, outputFilename)
 		printErrorAndExit(err)
 	}
 
@@ -223,5 +226,5 @@ func main() {
 		BorderForeground(lipgloss.AdaptiveColor{Light: "#8F2BF5", Dark: "#FF4D94"}).
 		Padding(1)
 
-	fmt.Println(style.Render("All done! Open up `resume.pdf`."))
+	fmt.Println(style.Render(fmt.Sprintf("All done! Open up `%s`.", outputFilename)))
 }
