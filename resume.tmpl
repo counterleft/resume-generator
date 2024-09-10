@@ -63,6 +63,10 @@
     p {
       font-size: 10px;
     }
+
+    .blurb {
+      font-style: italic;
+    }
   }
 </style>
 </head>
@@ -108,7 +112,7 @@
           <h2 class="title col-span-2">{{ .Title }} <span class="sub-title"> at {{ .Company }}</span></h2>
           <span class="time-span text-right opacity-50">{{ .StartDate }} - {{ .EndDate }}</span>
           {{ if .Summary }}
-          	<p class="col-span-3 max-w-xl">{{ .Summary }}</p>
+          	<p class="col-span-3 max-w-xl blurb">{{ .Summary }}</p>
           {{ end }}
         </div>
         <ul class="list-disc ml-4 max-w-xl">
