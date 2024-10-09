@@ -1,40 +1,45 @@
 {
   "header": {
-    "name": "Luke Skywalker",
-    "headline": "Jedi Master",
-    "linkedInUrl": "https://linkedin.com/does-mark-have-li",
-    "email": "luke@example.tld",
-    "location": "Tatooine, far far away",
-    "phone": "555-555-5555"
+    "name": "Anakin Skywalker",
+    "headline": "Highly skilled Jedi Knight",
+    "linkedInUrl": "https://bit.ly/3ZXfyKs",
+    "email": "anakin.skywalker@jediorder.rep",
+    "location": "Coruscant",
+    "phone": "555-426-5334"
   },
   "education": {
-    "school": "Yoda's hut",
-    "degree": "Jedi training (incomplete)",
-    "startDate": "20xx",
-    "endDate": "20xx"
+    "school": "Jedi Temple",
+    "degree": "Jedi",
+    "startDate": "32 BBY",
+    "endDate": "22 BBY"
   },
   "skills": [
-    "Technology: Drones",
-    "Training: Light side of the force"
+    "Fluent in Basic and Huttese",
+    "Exceptional podracing abilities",
+    "Advanced spacecraft and vehicle repair"
   ],
   "jobs": [
     {
-      "company": "Jedi Temple",
-      "startDate": "20xx",
-      "endDate": "20xx",
-      "title": "Jedi Master",
+      "company": "Jedi Order",
+      "startDate": "22 BBY",
+      "endDate": "Present",
+      "title": "Jedi Knight",
       "accomplishments": [
-        "Rebuilt the jedi order and trained a new generate of Jedi (until Darth Disney took over)."
+        "Led clone trooper squadrons in numerous successful campaigns during the Clone Wars",
+        "Mentored Padawan Ahsoka Tano, overseeing her training and development",
+        "Piloted various starfighters in space battles, consistently outperforming enemy pilots",
+        "Conducted diplomatic missions on behalf of the Jedi Council and Galactic Senate"
       ]
     },
     {
-      "company": "Rebels",
-      "startDate": "20xx",
-      "endDate": "20xx",
-      "title": "Jedi Knight & Pilot",
+      "company": "Jedi Order",
+      "startDate": "33 BBY",
+      "endDate": "22 BBY",
+      "title": "Padawan",
       "accomplishments": [
-        "Successfully destroyed two weapons of mass destruction (Death Stars).",
-        "Defeated the Galactic Empire on various occasions and ensured freedom from their rule."
+        "Trained under Jedi Master Obi-Wan Kenobi",
+        "Participated in the Battle of Geonosis, demonstrating exceptional combat skills",
+        "Assisted in various peacekeeping missions across the galaxy"
       ]
     }
   ]
