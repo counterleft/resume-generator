@@ -4,11 +4,8 @@ This is a toy project of mine that allows one to generate custom resume PDFs fro
 
 ## Use
 
-This project uses [Devbox][devbox] to manage the development environment.
+TODO Add new instructions since I'm not using Devbox anymore. Will probably switch to a devcontainer.
 
-With Devbox installed:
-
-1. Run a dev shell.
 1. Compile the generator: `go build`
 1. Copy the example resume data: `cp data.example.json data.json`
 1. Edit the resume data and add your own info.
@@ -21,10 +18,6 @@ I do not intend to maintain this app long-term. Sorry 💛.
 
 ## Development
 
-1. Install [Devbox][devbox].
-1. Use your favorite editor to make changes.
-1. Compile and test: `go build; ./resume-generator`
+TODO Add new instructions since I'm not using Devbox anymore. Will probably switch to a devcontainer.
 
 There's no tests here. Like I said, it's a toy project.
-
-[devbox]: https://www.jetify.com/devbox/docs/
