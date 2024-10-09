@@ -2,10 +2,13 @@
 <html>
 <head>
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
 <style>
   * {
-    font-family: "Inter", monospace;
+    font-family: "Libre Franklin", monospace;
   }
 
   .header {
@@ -95,12 +98,14 @@
     </div>
   </header>
 
+  {{ if .Summary }}
   <section class="section">
   	<div>
       <h1 class="heading mt-2 mb-2 pb-1 border border-0 border-b-2 border-[#d13920]">Summary</h1>
       <p>{{ .Summary }}</p>
     </div>
   </section>
+  {{ end }}
 
   <section class="section">
     <div>
@@ -108,8 +113,8 @@
       {{ range .Jobs }}
       {{ if gt (len .Accomplishments) 0 }}
       <article>
-        <div class="grid grid-cols-3 gap-x-4 gap-y-0 mt-2">
-          <h2 class="title col-span-2">{{ .Title }} <span class="sub-title"> at {{ .Company }}</span></h2>
+        <div class="grid grid-cols-4 gap-x-4 gap-y-0 mt-2">
+          <h2 class="title col-span-3">{{ .Title }} <span class="sub-title"> at {{ .Company }}</span></h2>
           <span class="time-span text-right opacity-50">{{ .StartDate }} - {{ .EndDate }}</span>
           {{ if .Summary }}
           	<p class="col-span-3 max-w-xl blurb">{{ .Summary }}</p>
@@ -130,8 +135,8 @@
       <h1 class="heading mt-2 mb-2 border border-0 border-b-2 border-[#d13920]">Education</h1>
       <article>
         <div class="grid grid-cols-8 gap-x-4 gap-y-0 my-2">
-          <h2 class="title">{{ .Education.School }}</h2>
-          <h3 class="sub-title col-span-6">{{ .Education.Degree}}</h3>
+          <h2 class="title col-span-3">{{ .Education.School }}</h2>
+          <h3 class="sub-title col-span-4">{{ .Education.Degree}}</h3>
           <span class="time-span text-right opacity-50">{{ .Education.EndDate }}</span>
         </div>
       </article>
