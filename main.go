@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"html/template"
 	"io"
@@ -137,8 +138,12 @@ func returnErrorf(message string, err error) error {
 // 	}
 // }
 
-func generateResume(resumeData ResumeData, outputFilename string) error {
-	templateFile := "resume.tmpl"
+type ResumeOptions struct {
+	TemplateFilename string
+}
+
+func generateResume(resumeData ResumeData, outputFilename string, options ResumeOptions) error {
+	templateFile := options.TemplateFilename
 	template, err := template.New(templateFile).ParseFiles(templateFile)
 	returnErrorf("unable to parse the template file", err)
 
@@ -187,33 +192,34 @@ func printErrorAndExit(err error) {
 	}
 }
 
-func main() {
-	if len(os.Args) < 2 {
+func parseCLIArguments() (string, ResumeOptions) {
+	templateFilename := flag.String("template", "resume.tmpl", "the html template to apply for this resume")
+
+	flag.Parse()
+
+	if len(flag.Args()) < 1 {
 		printErrorAndExit(fmt.Errorf("no <resume.json> file specified"))
 	}
 
-	dataFileName := os.Args[1]
+	dataFilename := flag.Args()[0]
 
-	resumeData, err := readJsonFileInto(dataFileName, ResumeData{})
+	options := ResumeOptions{
+		TemplateFilename: *templateFilename,
+	}
+
+	return dataFilename, options
+}
+
+func main() {
+	dataFilename, options := parseCLIArguments()
+
+	resumeData, err := readJsonFileInto(dataFilename, ResumeData{})
 	printErrorAndExit(err)
 
-	// choices := make([][]string, len(resumeData.Jobs))
-	// form := newForm(resumeData.Jobs, choices)
-	// err = form.Run()
-	// printErrorAndExit(err)
-
-	outputFilename := strings.Split(dataFileName, ".")[0] + ".pdf"
+	outputFilename := strings.Split(dataFilename, ".")[0] + ".pdf"
 
 	handleSubmission := func() {
-		// views := make([]Job, len(resumeData.Jobs))
-
-		// for i, job := range resumeData.Jobs {
-		// 	views[i] = newJobView(job, choices[i])
-		// }
-
-		// resumeData.Jobs = views
-
-		err = generateResume(resumeData, outputFilename)
+		err = generateResume(resumeData, outputFilename, options)
 		printErrorAndExit(err)
 	}
 
