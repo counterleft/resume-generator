@@ -1,0 +1,46 @@
+{
+  "header": {
+    "name": "Anakin Skywalker",
+    "headline": "Highly skilled Jedi Knight",
+    "linkedInUrl": "https://bit.ly/3ZXfyKs",
+    "email": "anakin.skywalker@jediorder.rep",
+    "location": "Coruscant",
+    "phone": "555-426-5334"
+  },
+  "education": {
+    "school": "Jedi Temple",
+    "degree": "Jedi",
+    "startDate": "32 BBY",
+    "endDate": "22 BBY"
+  },
+  "skills": [
+    "Fluent in Basic and Huttese",
+    "Exceptional podracing abilities",
+    "Advanced spacecraft and vehicle repair"
+  ],
+  "jobs": [
+    {
+      "company": "Jedi Order",
+      "startDate": "22 BBY",
+      "endDate": "Present",
+      "title": "Jedi Knight",
+      "accomplishments": [
+        "Led clone trooper squadrons in numerous successful campaigns during the Clone Wars",
+        "Mentored Padawan Ahsoka Tano, overseeing her training and development",
+        "Piloted various starfighters in space battles, consistently outperforming enemy pilots",
+        "Conducted diplomatic missions on behalf of the Jedi Council and Galactic Senate"
+      ]
+    },
+    {
+      "company": "Jedi Order",
+      "startDate": "33 BBY",
+      "endDate": "22 BBY",
+      "title": "Padawan",
+      "accomplishments": [
+        "Trained under Jedi Master Obi-Wan Kenobi",
+        "Participated in the Battle of Geonosis, demonstrating exceptional combat skills",
+        "Assisted in various peacekeeping missions across the galaxy"
+      ]
+    }
+  ]
+}
