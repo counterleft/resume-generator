@@ -2,6 +2,7 @@
 resume-generator
 
 # output
-resume.pdf
+*.pdf
 
 .DS_Store
+
