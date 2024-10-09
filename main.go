@@ -127,17 +127,6 @@ func returnErrorf(message string, err error) error {
 	return nil
 }
 
-// func newJobView(j Job, accomplishments []string) Job {
-// 	return Job{
-// 		Company:         j.Company,
-// 		StartDate:       j.StartDate,
-// 		EndDate:         j.EndDate,
-// 		Title:           j.Title,
-// 		Summary:         j.Summary,
-// 		Accomplishments: accomplishments,
-// 	}
-// }
-
 type ResumeOptions struct {
 	TemplateFilename string
 }
