@@ -181,8 +181,15 @@ func printErrorAndExit(err error) {
 	}
 }
 
-func parseCLIArguments() (string, ResumeOptions) {
+func parseCliArguments() (string, ResumeOptions) {
 	templateFilename := flag.String("template", "resume.tmpl", "the html template to apply for this resume")
+
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
+		flag.PrintDefaults()
+		fmt.Fprintf(os.Stderr, "\nArguments:\n")
+		fmt.Fprintf(os.Stderr, "  <data_file>  path to the resume datafile\n")
+	}
 
 	flag.Parse()
 
@@ -200,7 +207,7 @@ func parseCLIArguments() (string, ResumeOptions) {
 }
 
 func main() {
-	dataFilename, options := parseCLIArguments()
+	dataFilename, options := parseCliArguments()
 
 	resumeData, err := readJsonFileInto(dataFilename, ResumeData{})
 	printErrorAndExit(err)
