@@ -52,7 +52,7 @@ type ResumeData struct {
 func readJsonFileInto[T any](fileName string, container T) (T, error) {
 	jsonData, err := os.ReadFile(fileName)
 	if err != nil {
-		return container, fmt.Errorf("unable to read data.json; make sure the file exists in the same directory as this program")
+		return container, fmt.Errorf(fmt.Sprintf("unable to read `%s`; make sure the file exists in the same directory as this program", fileName))
 	}
 
 	if err := json.Unmarshal(jsonData, &container); err != nil {
