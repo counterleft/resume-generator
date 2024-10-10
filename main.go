@@ -172,12 +172,12 @@ func main() {
 
 	_ = spinner.New().Title("Preparing your resume...").Action(startGeneration).Run()
 
-	style := lipgloss.NewStyle().
+	successStyle := lipgloss.NewStyle().
 		Inherit(foregroundBaseStyle).
 		Bold(true).
 		Border(lipgloss.RoundedBorder()).
 		BorderForeground(lipgloss.AdaptiveColor{Light: "#8F2BF5", Dark: "#FF4D94"}).
 		Padding(1)
 
-	fmt.Println(style.Render(fmt.Sprintf("All done! Open up `%s`.", outputFilename)))
+	fmt.Println(successStyle.Render(fmt.Sprintf("All done! Open up `%s`.", outputFilename)))
 }
