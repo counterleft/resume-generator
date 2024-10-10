@@ -10,8 +10,6 @@ import (
 	"os"
 	"strings"
 
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/huh"
 	"github.com/charmbracelet/huh/spinner"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/playwright-community/playwright-go"
@@ -61,62 +59,6 @@ func readJsonFileInto[T any](fileName string, container T) (T, error) {
 	}
 
 	return container, nil
-}
-
-func newMultiSelects(jobs []Job, choices [][]string) []huh.Field {
-	selects := make([]huh.Field, len(jobs))
-
-	for i, job := range jobs {
-		selects[i] = huh.NewMultiSelect[string]().
-			Title(fmt.Sprintf("%s (%s)", job.Title, job.Company)).
-			Options(newAccomplishmentOptions(job)...).
-			Value(&choices[i])
-	}
-
-	return selects
-}
-
-func newAccomplishmentOptions(j Job) []huh.Option[string] {
-	var options []huh.Option[string]
-
-	for _, a := range j.Accomplishments {
-		options = append(options, huh.NewOption(a, a).Selected(true))
-	}
-
-	return options
-}
-
-func newForm(jobs []Job, choices [][]string) *huh.Form {
-	selects := newMultiSelects(jobs, choices)
-
-	foreground := lipgloss.CompleteAdaptiveColor{
-		Light: lipgloss.CompleteColor{TrueColor: "#8F2BF5", ANSI256: "55", ANSI: "45"},
-		Dark:  lipgloss.CompleteColor{TrueColor: "#F27EDE", ANSI256: "213", ANSI: "105"},
-	}
-
-	highlighted := lipgloss.NewStyle().Foreground(foreground)
-
-	desc := fmt.Sprintf("We've loaded your resume data.\nPlease %s you want in your generated resume.\nAll have been selected by default.", highlighted.Render("pick the accomplishments"))
-
-	fields := []huh.Field{
-		huh.NewNote().
-			Title("Welcome to Resume Generator").
-			Description(desc),
-	}
-
-	fields = append(fields, selects...)
-
-	form := huh.NewForm(
-		huh.NewGroup(
-			fields...,
-		),
-	).WithProgramOptions(tea.WithAltScreen())
-
-	if os.Getenv("ACCESSIBLE") != "" {
-		form.WithAccessible(true)
-	}
-
-	return form
 }
 
 func returnErrorf(message string, err error) error {
@@ -223,12 +165,12 @@ func main() {
 
 	outputFilename := strings.Split(dataFilename, ".")[0] + ".pdf"
 
-	handleSubmission := func() {
+	startGeneration := func() {
 		err = generateResume(resumeData, outputFilename, options)
 		printErrorAndExit(err)
 	}
 
-	_ = spinner.New().Title("Preparing your resume...").Action(handleSubmission).Run()
+	_ = spinner.New().Title("Preparing your resume...").Action(startGeneration).Run()
 
 	style := lipgloss.NewStyle().
 		Inherit(foregroundBaseStyle).
