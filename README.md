@@ -1,6 +1,6 @@
 # resume-generator
 
-This is a toy project of mine that allows one to generate custom resume PDFs from subsets of their job history.
+This is a toy project of mine that allows one to generate custom resume PDFs using JSON as input data files.
 
 ## Use
 
