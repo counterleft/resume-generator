@@ -174,9 +174,18 @@ func generateResume(resumeData ResumeData, outputFilename string, options Resume
 	return nil
 }
 
+var foregroundBaseStyle = lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#353535", Dark: "#FFF7D8"})
+
+var errorMessageStyle = lipgloss.NewStyle().Inherit(foregroundBaseStyle)
+
+var errorIconStyle = lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#8F2BF5", Dark: "#FF4D94"}).MarginRight(2)
+
 func printErrorAndExit(err error) {
 	if err != nil {
-		fmt.Printf("We ran into some trouble: %s\n", err.Error())
+		message := fmt.Sprintf("We ran into some trouble: %s", err.Error())
+		styledMessage := errorIconStyle.Render("!!") + errorMessageStyle.Render(message)
+		fmt.Println(styledMessage)
+
 		os.Exit(1)
 	}
 }
@@ -222,8 +231,8 @@ func main() {
 	_ = spinner.New().Title("Preparing your resume...").Action(handleSubmission).Run()
 
 	style := lipgloss.NewStyle().
+		Inherit(foregroundBaseStyle).
 		Bold(true).
-		Foreground(lipgloss.AdaptiveColor{Light: "#353535", Dark: "#FFF7D8"}).
 		Border(lipgloss.RoundedBorder()).
 		BorderForeground(lipgloss.AdaptiveColor{Light: "#8F2BF5", Dark: "#FF4D94"}).
 		Padding(1)
